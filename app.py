@@ -23,7 +23,7 @@ def index():
         napaka = str(exc)
 
     return template(
-        "Presentation/views/index.tpl",
+        "Presentation/views/index.html",
         restavracije=restavracije,
         iskanje=iskanje,
         napaka=napaka,
