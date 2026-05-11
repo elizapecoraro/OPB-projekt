@@ -1,0 +1,38 @@
+# Virtualna okolja
+env/
+venv/
+.venv/
+ENV/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Nastavitve in skrivnosti
+.env
+.env.*
+*.local
+
+# Baze / lokalni izvozi
+*.sqlite
+*.sqlite3
+*.db
+
+# OS in editor datoteke
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/launch.json
+
+# Logi
+*.log
+
+# Build / paketi
+build/
+dist/
+*.egg-info/
