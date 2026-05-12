@@ -1,3 +1,9 @@
+DROP TABLE IF EXISTS restavracija_kuhinja CASCADE;
+DROP TABLE IF EXISTS delovni_cas CASCADE;
+DROP TABLE IF EXISTS restavracija CASCADE;
+DROP TABLE IF EXISTS kuhinja CASCADE;
+DROP TABLE IF EXISTS lokacija CASCADE;
+
 CREATE TABLE lokacija (
     lokacija_id SERIAL PRIMARY KEY,
     ime_lokacije VARCHAR(100) NOT NULL
@@ -18,6 +24,7 @@ CREATE TABLE restavracija (
 
     FOREIGN KEY (lokacija_id)
         REFERENCES lokacija(lokacija_id)
+        ON DELETE CASCADE
 );
 
 CREATE TABLE kuhinja (
@@ -32,10 +39,12 @@ CREATE TABLE restavracija_kuhinja (
     PRIMARY KEY (restavracija_id, kuhinja_id),
 
     FOREIGN KEY (restavracija_id)
-        REFERENCES restavracija(restavracija_id),
+        REFERENCES restavracija(restavracija_id)
+        ON DELETE CASCADE,
 
     FOREIGN KEY (kuhinja_id)
         REFERENCES kuhinja(kuhinja_id)
+        ON DELETE CASCADE
 );
 
 CREATE TABLE delovni_cas (
@@ -47,4 +56,5 @@ CREATE TABLE delovni_cas (
 
     FOREIGN KEY (restavracija_id)
         REFERENCES restavracija(restavracija_id)
+        ON DELETE CASCADE
 );
