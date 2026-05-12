@@ -2,19 +2,19 @@ from dataclasses import dataclass
 from decimal import Decimal
 from typing import Optional
 
-
+@dataclass_json
 @dataclass
 class Lokacija:
     lokacija_id: int
     ime_lokacije: str
 
-
+@dataclass_json
 @dataclass
 class Kuhinja:
     kuhinja_id: int
     vrsta: str
 
-
+@dataclass_json
 @dataclass
 class Restavracija:
     restavracija_id: int
@@ -30,7 +30,7 @@ class Restavracija:
     lokacija_id: int
     ime_lokacije: Optional[str] = None
 
-
+@dataclass_json
 @dataclass
 class DelovniCas:
     delovni_cas_id: int
