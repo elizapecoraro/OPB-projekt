@@ -1,4 +1,4 @@
-db = 'sem2026_elizakp'
+db = 'sem2026_kajabl'
 host = 'baza.fmf.uni-lj.si'
-user = 'javnost'
-password = 'javnogeslo'
+user = 'kajabl'
+password = 'yphdxh8l' 
