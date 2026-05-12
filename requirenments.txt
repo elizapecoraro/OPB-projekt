@@ -1,2 +1,9 @@
 bottle
 psycopg2-binary
+numpy
+psycopg2
+pandas
+dataclasses-json
+bcrypt
+datetime
+jupyter-server-proxy
