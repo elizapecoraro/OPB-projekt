@@ -58,3 +58,9 @@ CREATE TABLE delovni_cas (
         REFERENCES restavracija(restavracija_id)
         ON DELETE CASCADE
 );
+
+
+SELECT COUNT(*) FROM lokacija;
+SELECT COUNT(*) FROM restavracija;
+SELECT COUNT(*) FROM kuhinja;
+SELECT COUNT(*) FROM restavracija_kuhinja;

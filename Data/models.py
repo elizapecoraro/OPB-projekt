@@ -5,10 +5,6 @@ from dataclasses_json import dataclass_json
 
 
 @dataclass_json
-#
-
-
-
 @dataclass
 class Lokacija:
     lokacija_id: int
