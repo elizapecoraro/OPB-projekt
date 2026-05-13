@@ -4,7 +4,13 @@ from Data.database import get_cursor
 class RestavracijaRepository:
     """Metode za branje podatkov o restavracijah iz baze."""
 
-    def seznam_restavracij(self, iskanje: str | None = None, limit: int = 50):
+    def seznam_restavracij(
+    self,
+    iskanje: str | None = None,
+    lokacija_id: int | None = None,
+    kuhinja_id: int | None = None,
+    limit: int = 100,
+    ):
         query = """
             SELECT
                 r.restavracija_id,
@@ -15,17 +21,44 @@ class RestavracijaRepository:
                 r.spletna_stran,
                 r.zemljepisna_sirina,
                 r.zemljepisna_dolzina,
-                l.ime_lokacije
+                l.ime_lokacije,
+                COALESCE(STRING_AGG(k.vrsta, ', ' ORDER BY k.vrsta), '') AS kuhinje
             FROM restavracija r
             JOIN lokacija l ON l.lokacija_id = r.lokacija_id
+            LEFT JOIN restavracija_kuhinja rk ON rk.restavracija_id = r.restavracija_id
+            LEFT JOIN kuhinja k ON k.kuhinja_id = rk.kuhinja_id
         """
+
+        where = []
         params: list[object] = []
 
         if iskanje:
-            query += " WHERE LOWER(r.ime) LIKE LOWER(%s) OR LOWER(l.ime_lokacije) LIKE LOWER(%s)"
-            params.extend([f"%{iskanje}%", f"%{iskanje}%"])
+            where.append("(LOWER(r.ime) LIKE LOWER(%s) OR LOWER(l.ime_lokacije) LIKE LOWER(%s) OR LOWER(k.vrsta) LIKE LOWER(%s))")
+            params.extend([f"%{iskanje}%", f"%{iskanje}%", f"%{iskanje}%"])
 
-        query += " ORDER BY r.ime LIMIT %s"
+        if lokacija_id:
+            where.append("r.lokacija_id = %s")
+            params.append(lokacija_id)
+
+        if kuhinja_id:
+            where.append("""
+                EXISTS (
+                    SELECT 1
+                    FROM restavracija_kuhinja rk2
+                    WHERE rk2.restavracija_id = r.restavracija_id
+                    AND rk2.kuhinja_id = %s
+                )
+            """)
+            params.append(kuhinja_id)
+
+        if where:
+            query += " WHERE " + " AND ".join(where)
+
+        query += """
+            GROUP BY r.restavracija_id, l.ime_lokacije
+            ORDER BY r.ime
+            LIMIT %s
+        """
         params.append(limit)
 
         with get_cursor() as cur:
@@ -48,3 +81,22 @@ class RestavracijaRepository:
         with get_cursor() as cur:
             cur.execute(query, [restavracija_id])
             return cur.fetchone()
+        
+    def vse_lokacije(self):
+        with get_cursor() as cur:
+            cur.execute("""
+                SELECT lokacija_id, ime_lokacije
+                FROM lokacija
+                ORDER BY ime_lokacije
+            """)
+            return cur.fetchall()
+
+
+    def vse_kuhinje(self):
+        with get_cursor() as cur:
+            cur.execute("""
+                SELECT kuhinja_id, vrsta
+                FROM kuhinja
+                ORDER BY vrsta
+            """)
+            return cur.fetchall()

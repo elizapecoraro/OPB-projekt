@@ -59,8 +59,3 @@ CREATE TABLE delovni_cas (
         ON DELETE CASCADE
 );
 
-
-SELECT COUNT(*) FROM lokacija;
-SELECT COUNT(*) FROM restavracija;
-SELECT COUNT(*) FROM kuhinja;
-SELECT COUNT(*) FROM restavracija_kuhinja;

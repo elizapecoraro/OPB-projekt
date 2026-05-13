@@ -1,46 +1,92 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="sl">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Restavracije v Sloveniji</title>
-  <link rel="stylesheet" href="/static/style.css">
+    <meta charset="UTF-8">
+    <title>Restavracije v Sloveniji</title>
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-  <main class="container">
-    <header>
-      <h1>Restavracije v Sloveniji</h1>
-      <p>Pregled restavracij, lokacij in vrst kuhinje po podatkih OpenStreetMap.</p>
-    </header>
+    <main>
+        <h1>Restavracije v Sloveniji</h1>
 
-    <form method="get" action="/" class="search-form">
-      <input type="search" name="q" value="{{iskanje}}" placeholder="Išči po imenu ali kraju">
-      <button type="submit">Išči</button>
-    </form>
+        <p>Pregled restavracij, lokacij in vrst kuhinje po podatkih OpenStreetMap.</p>
 
-    % if napaka:
-      <section class="warning">
-        <strong>Baza še ni povezana.</strong>
-        <p>{{napaka}}</p>
-        <p>Ko ustvariš PostgreSQL bazo in zaženeš <code>Data/create.sql</code>, se bodo tukaj prikazali podatki.</p>
-      </section>
-    % end
+        <form method="get" action="/" class="filters">
+            <input
+                type="text"
+                name="q"
+                value="{{iskanje}}"
+                placeholder="Išči po imenu, kraju ali kuhinji"
+            >
 
-    <section class="cards">
-      % for r in restavracije:
-        <article class="card">
-          <h2>{{r["ime"]}}</h2>
-          <p>{{r.get("ime_lokacije") or "Lokacija ni navedena"}}</p>
-          % naslov = " ".join([x for x in [r.get("ulica"), r.get("hisna_stevilka")] if x])
-          % if naslov:
-            <p>{{naslov}}</p>
-          % end
-          % if r.get("spletna_stran"):
-            <a href="{{r['spletna_stran']}}" target="_blank" rel="noreferrer">Spletna stran</a>
-          % end
-        </article>
-      % end
-    </section>
-  </main>
+            <select name="lokacija_id">
+                <option value="">Vse lokacije</option>
+                % for l in lokacije:
+                    <option value="{{l['lokacija_id']}}" {{'selected' if str(l['lokacija_id']) == izbrana_lokacija else ''}}>
+                        {{l['ime_lokacije']}}
+                    </option>
+                % end
+            </select>
+
+            <select name="kuhinja_id">
+                <option value="">Vse kuhinje</option>
+                % for k in kuhinje:
+                    <option value="{{k['kuhinja_id']}}" {{'selected' if str(k['kuhinja_id']) == izbrana_kuhinja else ''}}>
+                        {{k['vrsta']}}
+                    </option>
+                % end
+            </select>
+
+            <button type="submit">Filtriraj</button>
+        </form>
+
+        % if napaka:
+            <section class="warning">
+                <h2>Baza še ni povezana.</h2>
+                <p>{{napaka}}</p>
+                <p>Ko ustvariš PostgreSQL bazo in zaženeš <code>Data/create.sql</code>, se bodo tukaj prikazali podatki.</p>
+            </section>
+        % end
+
+        % if not napaka:
+            <p>Najdenih restavracij: {{len(restavracije)}}</p>
+        % end
+
+        % for r in restavracije:
+            <article class="card">
+                <h2>{{r["ime"]}}</h2>
+
+                <p>
+                    <strong>Lokacija:</strong>
+                    {{r.get("ime_lokacije") or "Lokacija ni navedena"}}
+                </p>
+
+                % naslov = " ".join([x for x in [r.get("ulica"), r.get("hisna_stevilka")] if x])
+                % if naslov:
+                    <p><strong>Naslov:</strong> {{naslov}}</p>
+                % end
+
+                % if r.get("kuhinje"):
+                    <p><strong>Kuhinje:</strong> {{r["kuhinje"]}}</p>
+                % end
+
+                % if r.get("telefon"):
+                    <p><strong>Telefon:</strong> {{r["telefon"]}}</p>
+                % end
+
+                % if r.get("spletna_stran"):
+                    <p>
+                        <a href="{{r['spletna_stran']}}" target="_blank">
+                            Spletna stran
+                        </a>
+                    </p>
+                % end
+            </article>
+        % end
+
+        % if not napaka and len(restavracije) == 0:
+            <p>Ni restavracij, ki bi ustrezale izbranim filtrom.</p>
+        % end
+    </main>
 </body>
 </html>
