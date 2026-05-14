@@ -5,6 +5,26 @@ from Services.restavracija_service import RestavracijaService
 app = Bottle()
 service = RestavracijaService()
 
+DNEVI = [
+    {"id": 1, "ime": "ponedeljek"},
+    {"id": 2, "ime": "torek"},
+    {"id": 3, "ime": "sreda"},
+    {"id": 4, "ime": "četrtek"},
+    {"id": 5, "ime": "petek"},
+    {"id": 6, "ime": "sobota"},
+    {"id": 7, "ime": "nedelja"},
+]
+
+
+def v_int(vrednost):
+    if vrednost is None or vrednost == "":
+        return None
+
+    try:
+        return int(vrednost)
+    except ValueError:
+        return None
+
 
 @app.route("/static/<filepath:path>")
 def server_static(filepath):
@@ -16,6 +36,7 @@ def index():
     iskanje = request.query.getunicode("q") or ""
     lokacija_id = request.query.getunicode("lokacija_id") or ""
     kuhinja_id = request.query.getunicode("kuhinja_id") or ""
+    dan_v_tednu = request.query.getunicode("dan_v_tednu") or ""
 
     napaka = None
     restavracije = []
@@ -23,13 +44,16 @@ def index():
     kuhinje = []
 
     try:
-        restavracije = service.poisci_restavracije(
-            iskanje=iskanje or None,
-            lokacija_id=int(lokacija_id) if lokacija_id else None,
-            kuhinja_id=int(kuhinja_id) if kuhinja_id else None,
-        )
         lokacije = service.vse_lokacije()
         kuhinje = service.vse_kuhinje()
+
+        restavracije = service.poisci_restavracije(
+            iskanje=iskanje or None,
+            lokacija_id=v_int(lokacija_id),
+            kuhinja_id=v_int(kuhinja_id),
+            dan_v_tednu=v_int(dan_v_tednu),
+        )
+
     except Exception as exc:
         napaka = str(exc)
 
@@ -38,9 +62,11 @@ def index():
         restavracije=restavracije,
         lokacije=lokacije,
         kuhinje=kuhinje,
+        dnevi=DNEVI,
         iskanje=iskanje,
         izbrana_lokacija=lokacija_id,
         izbrana_kuhinja=kuhinja_id,
+        izbrani_dan=dan_v_tednu,
         napaka=napaka,
     )
 

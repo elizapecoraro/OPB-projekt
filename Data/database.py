@@ -1,17 +1,23 @@
 import os
+from contextlib import contextmanager
+from pathlib import Path
+
 import psycopg2
 from psycopg2.extras import RealDictCursor
-from contextlib import contextmanager
+from dotenv import load_dotenv
 
-from Data import auth_public
+
+# Poišče .env v glavni mapi projekta
+BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(BASE_DIR / ".env")
 
 
 def get_connection():
     return psycopg2.connect(
-        host=os.getenv("DB_HOST", auth_public.host),
-        port=os.getenv("DB_PORT", auth_public.port),
-        dbname=os.getenv("DB_NAME", auth_public.db),
-        user=os.getenv("DB_USER", auth_public.user),
+        host=os.getenv("DB_HOST"),
+        port=os.getenv("DB_PORT"),
+        dbname=os.getenv("DB_NAME"),
+        user=os.getenv("DB_USER"),
         password=os.getenv("DB_PASSWORD"),
         cursor_factory=RealDictCursor,
     )
@@ -20,6 +26,8 @@ def get_connection():
 @contextmanager
 def get_cursor():
     conn = get_connection()
+    cur = None
+
     try:
         cur = conn.cursor()
         yield cur
@@ -28,5 +36,6 @@ def get_cursor():
         conn.rollback()
         raise
     finally:
-        cur.close()
+        if cur is not None:
+            cur.close()
         conn.close()

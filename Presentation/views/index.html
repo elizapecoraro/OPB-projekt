@@ -5,11 +5,14 @@
     <title>Restavracije v Sloveniji</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
+
 <body>
     <main>
         <h1>Restavracije v Sloveniji</h1>
 
-        <p>Pregled restavracij, lokacij in vrst kuhinje po podatkih OpenStreetMap.</p>
+        <p>
+            Pregled restavracij, lokacij in vrst kuhinje po podatkih OpenStreetMap.
+        </p>
 
         <form method="get" action="/" class="filters">
             <input
@@ -21,6 +24,7 @@
 
             <select name="lokacija_id">
                 <option value="">Vse lokacije</option>
+
                 % for l in lokacije:
                     <option value="{{l['lokacija_id']}}" {{'selected' if str(l['lokacija_id']) == izbrana_lokacija else ''}}>
                         {{l['ime_lokacije']}}
@@ -30,6 +34,7 @@
 
             <select name="kuhinja_id">
                 <option value="">Vse kuhinje</option>
+
                 % for k in kuhinje:
                     <option value="{{k['kuhinja_id']}}" {{'selected' if str(k['kuhinja_id']) == izbrana_kuhinja else ''}}>
                         {{k['vrsta']}}
@@ -37,19 +42,36 @@
                 % end
             </select>
 
-            <button type="submit">Filtriraj</button>
+            <select name="dan_v_tednu">
+                <option value="">Vsi dnevi</option>
+
+                % for d in dnevi:
+                    <option value="{{d['id']}}" {{'selected' if str(d['id']) == izbrani_dan else ''}}>
+                        {{d['ime']}}
+                    </option>
+                % end
+            </select>
+
+            <button type="submit">Išči</button>
         </form>
 
         % if napaka:
             <section class="warning">
-                <h2>Baza še ni povezana.</h2>
+                <h2>Napaka pri povezavi ali branju iz baze.</h2>
+
                 <p>{{napaka}}</p>
-                <p>Ko ustvariš PostgreSQL bazo in zaženeš <code>Data/create.sql</code>, se bodo tukaj prikazali podatki.</p>
+
+                <p>
+                    Preveri, ali imaš pravilno nastavljeno povezavo do baze,
+                    ustvarjene tabele in uvožene podatke.
+                </p>
             </section>
         % end
 
         % if not napaka:
-            <p>Najdenih restavracij: {{len(restavracije)}}</p>
+            <p>
+                Najdenih restavracij: {{len(restavracije)}}
+            </p>
         % end
 
         % for r in restavracije:
@@ -63,15 +85,31 @@
 
                 % naslov = " ".join([x for x in [r.get("ulica"), r.get("hisna_stevilka")] if x])
                 % if naslov:
-                    <p><strong>Naslov:</strong> {{naslov}}</p>
+                    <p>
+                        <strong>Naslov:</strong>
+                        {{naslov}}
+                    </p>
                 % end
 
                 % if r.get("kuhinje"):
-                    <p><strong>Kuhinje:</strong> {{r["kuhinje"]}}</p>
+                    <p>
+                        <strong>Kuhinje:</strong>
+                        {{r["kuhinje"]}}
+                    </p>
+                % end
+
+                % if r.get("opening_hours_raw"):
+                    <p>
+                        <strong>Delovni čas:</strong>
+                        {{r["opening_hours_raw"]}}
+                    </p>
                 % end
 
                 % if r.get("telefon"):
-                    <p><strong>Telefon:</strong> {{r["telefon"]}}</p>
+                    <p>
+                        <strong>Telefon:</strong>
+                        {{r["telefon"]}}
+                    </p>
                 % end
 
                 % if r.get("spletna_stran"):
@@ -81,11 +119,24 @@
                         </a>
                     </p>
                 % end
+
+                % if r.get("zemljepisna_sirina") and r.get("zemljepisna_dolzina"):
+                    <p>
+                        <a
+                            href="https://www.openstreetmap.org/?mlat={{r['zemljepisna_sirina']}}&mlon={{r['zemljepisna_dolzina']}}#map=18/{{r['zemljepisna_sirina']}}/{{r['zemljepisna_dolzina']}}"
+                            target="_blank"
+                        >
+                            Prikaži na zemljevidu
+                        </a>
+                    </p>
+                % end
             </article>
         % end
 
         % if not napaka and len(restavracije) == 0:
-            <p>Ni restavracij, ki bi ustrezale izbranim filtrom.</p>
+            <p>
+                Ni restavracij, ki bi ustrezale izbranim filtrom.
+            </p>
         % end
     </main>
 </body>

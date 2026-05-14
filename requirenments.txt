@@ -7,3 +7,4 @@ dataclasses-json
 bcrypt
 datetime
 jupyter-server-proxy
+dotenv

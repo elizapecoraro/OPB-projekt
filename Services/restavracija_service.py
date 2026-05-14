@@ -2,8 +2,6 @@ from Data.restavracija_repository import RestavracijaRepository
 
 
 class RestavracijaService:
-    """Aplikacijska logika za restavracije."""
-
     def __init__(self):
         self.repo = RestavracijaRepository()
 
@@ -12,17 +10,18 @@ class RestavracijaService:
         iskanje: str | None = None,
         lokacija_id: int | None = None,
         kuhinja_id: int | None = None,
+        dan_v_tednu: int | None = None,
     ):
         return self.repo.seznam_restavracij(
             iskanje=iskanje,
             lokacija_id=lokacija_id,
             kuhinja_id=kuhinja_id,
-            limit=100,
+            dan_v_tednu=dan_v_tednu,
+            #limit=None,
         )
-    
+
     def vse_lokacije(self):
         return self.repo.vse_lokacije()
-
 
     def vse_kuhinje(self):
         return self.repo.vse_kuhinje()
