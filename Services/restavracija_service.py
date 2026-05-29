@@ -13,6 +13,9 @@ class RestavracijaService:
         dan_v_tednu: int | None = None,
         ima_telefon: bool = False,
         ima_spletno_stran: bool = False,
+        ima_delovni_cas: bool = False,
+        limit: int = 20,
+        offset: int = 0,
     ):
         if iskanje is not None:
             iskanje = iskanje.strip()
@@ -26,7 +29,34 @@ class RestavracijaService:
             dan_v_tednu=dan_v_tednu,
             ima_telefon=ima_telefon,
             ima_spletno_stran=ima_spletno_stran,
-            limit=200,
+            ima_delovni_cas=ima_delovni_cas,
+            limit=limit,
+            offset=offset,
+        )
+    
+    def stevilo_restavracij(
+        self,
+        iskanje: str | None = None,
+        lokacija_id: int | None = None,
+        kuhinja_id: int | None = None,
+        dan_v_tednu: int | None = None,
+        ima_telefon: bool = False,
+        ima_spletno_stran: bool = False,
+        ima_delovni_cas: bool = False,
+    ):
+        if iskanje is not None:
+            iskanje = iskanje.strip()
+            if iskanje == "":
+                iskanje = None
+
+        return self.repo.stevilo_restavracij(
+            iskanje=iskanje,
+            lokacija_id=lokacija_id,
+            kuhinja_id=kuhinja_id,
+            dan_v_tednu=dan_v_tednu,
+            ima_telefon=ima_telefon,
+            ima_spletno_stran=ima_spletno_stran,
+            ima_delovni_cas=ima_delovni_cas,
         )
 
     def vse_lokacije(self):

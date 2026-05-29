@@ -10,7 +10,9 @@ class RestavracijaRepository:
         dan_v_tednu: int | None = None,
         ima_telefon: bool = False,
         ima_spletno_stran: bool = False,
-        limit: int = 200,       #mogoč 100
+        ima_delovni_cas: bool = False,
+        limit: int = 20,
+        offset: int = 0,
     ):
         query = """
             SELECT
@@ -82,19 +84,118 @@ class RestavracijaRepository:
         if ima_spletno_stran:
             where.append("r.spletna_stran IS NOT NULL AND TRIM(r.spletna_stran) <> ''")
 
+        if ima_delovni_cas:
+            where.append(
+                """
+                EXISTS (
+                    SELECT 1
+                    FROM delovni_cas dc2
+                    WHERE dc2.restavracija_id = r.restavracija_id
+                )
+                """
+            )
+
         if where:
             query += " WHERE " + " AND ".join(where)
 
         query += """
             GROUP BY r.restavracija_id, l.ime_lokacije
             ORDER BY r.ime
-            LIMIT %s
+            LIMIT %s OFFSET %s
         """
-        params.append(limit)
+        params.extend([limit, offset])
 
         with get_cursor() as cur:
             cur.execute(query, params)
             return cur.fetchall()
+        
+    def stevilo_restavracij(
+        self,
+        iskanje: str | None = None,
+        lokacija_id: int | None = None,
+        kuhinja_id: int | None = None,
+        dan_v_tednu: int | None = None,
+        ima_telefon: bool = False,
+        ima_spletno_stran: bool = False,
+        ima_delovni_cas: bool = False,
+    ):
+        query = """
+            SELECT COUNT(DISTINCT r.restavracija_id) AS stevilo
+            FROM restavracija r
+            JOIN lokacija l ON l.lokacija_id = r.lokacija_id
+            LEFT JOIN restavracija_kuhinja rk ON rk.restavracija_id = r.restavracija_id
+            LEFT JOIN kuhinja k ON k.kuhinja_id = rk.kuhinja_id
+        """
+
+        where = []
+        params = []
+
+        if iskanje:
+            where.append(
+                """
+                (
+                    LOWER(r.ime) LIKE LOWER(%s)
+                    OR LOWER(l.ime_lokacije) LIKE LOWER(%s)
+                    OR LOWER(k.vrsta) LIKE LOWER(%s)
+                )
+                """
+            )
+            params.extend([f"%{iskanje}%", f"%{iskanje}%", f"%{iskanje}%"])
+
+        if lokacija_id:
+            where.append("r.lokacija_id = %s")
+            params.append(lokacija_id)
+
+        if kuhinja_id:
+            where.append(
+                """
+                EXISTS (
+                    SELECT 1
+                    FROM restavracija_kuhinja rk2
+                    WHERE rk2.restavracija_id = r.restavracija_id
+                    AND rk2.kuhinja_id = %s
+                )
+                """
+            )
+            params.append(kuhinja_id)
+
+        if dan_v_tednu:
+            where.append(
+                """
+                EXISTS (
+                    SELECT 1
+                    FROM delovni_cas dc
+                    WHERE dc.restavracija_id = r.restavracija_id
+                    AND dc.dan_v_tednu = %s
+                )
+                """
+            )
+            params.append(dan_v_tednu)
+
+        if ima_telefon:
+            where.append("r.telefon IS NOT NULL AND TRIM(r.telefon) <> ''")
+
+        if ima_spletno_stran:
+            where.append("r.spletna_stran IS NOT NULL AND TRIM(r.spletna_stran) <> ''")
+
+        if ima_delovni_cas:
+            where.append(
+                """
+                EXISTS (
+                    SELECT 1
+                    FROM delovni_cas dc2
+                    WHERE dc2.restavracija_id = r.restavracija_id
+                )
+                """
+            )
+
+        if where:
+            query += " WHERE " + " AND ".join(where)
+
+        with get_cursor() as cur:
+            cur.execute(query, params)
+            vrstica = cur.fetchone()
+            return vrstica["stevilo"]
 
     def restavracija_po_id(self, restavracija_id: int):
         query = """

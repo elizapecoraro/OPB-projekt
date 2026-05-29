@@ -76,6 +76,18 @@
                 Ima spletno stran
             </label>
 
+            <label>
+                <input
+                    type="checkbox"
+                    name="ima_delovni_cas"
+                    value="1"
+                    % if ima_delovni_cas:
+                        checked
+                    % end
+                >
+                Ima podan delovni čas
+            </label>
+
             <button type="submit">Išči</button>
         </form>
 
@@ -94,7 +106,8 @@
 
         % if not napaka:
             <p>
-                Najdenih restavracij: {{len(restavracije)}}
+                Najdenih restavracij: {{skupno_restavracij}}.
+                Prikazujem stran {{stran}} od {{skupno_strani}}.
             </p>
         % end
 
@@ -159,6 +172,26 @@
                     </p>
                 % end
             </article>
+        % end
+
+        % if not napaka and skupno_strani > 1:
+            <nav class="pagination">
+                % if stran > 1:
+                    <a href="?q={{iskanje}}&lokacija_id={{izbrana_lokacija}}&kuhinja_id={{izbrana_kuhinja}}&dan_v_tednu={{izbrani_dan}}&ima_telefon={{'1' if ima_telefon else ''}}&ima_spletno_stran={{'1' if ima_spletno_stran else ''}}&ima_delovni_cas={{'1' if ima_delovni_cas else ''}}&stran={{stran - 1}}">
+                        ← Prejšnja
+                    </a>
+                % end
+
+                <span>
+                    Stran {{stran}} / {{skupno_strani}}
+                </span>
+
+                % if stran < skupno_strani:
+                    <a href="?q={{iskanje}}&lokacija_id={{izbrana_lokacija}}&kuhinja_id={{izbrana_kuhinja}}&dan_v_tednu={{izbrani_dan}}&ima_telefon={{'1' if ima_telefon else ''}}&ima_spletno_stran={{'1' if ima_spletno_stran else ''}}&ima_delovni_cas={{'1' if ima_delovni_cas else ''}}&stran={{stran + 1}}">
+                        Naslednja →
+                    </a>
+                % end
+            </nav>
         % end
 
         % if not napaka and len(restavracije) == 0:
