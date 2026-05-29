@@ -52,6 +52,30 @@
                 % end
             </select>
 
+            <label>
+                <input
+                    type="checkbox"
+                    name="ima_telefon"
+                    value="1"
+                    % if ima_telefon:
+                        checked
+                    % end
+                >
+                Ima telefonsko številko
+            </label>
+
+            <label>
+                <input
+                    type="checkbox"
+                    name="ima_spletno_stran"
+                    value="1"
+                    % if ima_spletno_stran:
+                        checked
+                    % end
+                >
+                Ima spletno stran
+            </label>
+
             <button type="submit">Išči</button>
         </form>
 

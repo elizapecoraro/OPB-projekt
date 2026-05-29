@@ -39,6 +39,8 @@ def index():
     lokacija_id = request.query.getunicode("lokacija_id") or ""
     kuhinja_id = request.query.getunicode("kuhinja_id") or ""
     dan_v_tednu = request.query.getunicode("dan_v_tednu") or ""
+    ima_telefon = request.query.getunicode("ima_telefon") == "1"
+    ima_spletno_stran = request.query.getunicode("ima_spletno_stran") == "1"
 
     napaka = None
     restavracije = []
@@ -54,6 +56,8 @@ def index():
             lokacija_id=v_int(lokacija_id),
             kuhinja_id=v_int(kuhinja_id),
             dan_v_tednu=v_int(dan_v_tednu),
+            ima_telefon=ima_telefon,
+            ima_spletno_stran=ima_spletno_stran,
         )
     except Exception as exc:
         napaka = str(exc)
@@ -68,6 +72,8 @@ def index():
         izbrana_lokacija=lokacija_id,
         izbrana_kuhinja=kuhinja_id,
         izbrani_dan=dan_v_tednu,
+        ima_telefon=ima_telefon,
+        ima_spletno_stran=ima_spletno_stran,
         napaka=napaka,
     )
 

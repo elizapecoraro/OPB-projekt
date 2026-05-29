@@ -8,7 +8,9 @@ class RestavracijaRepository:
         lokacija_id: int | None = None,
         kuhinja_id: int | None = None,
         dan_v_tednu: int | None = None,
-        limit: int = 200,           #limit: int = 100,   pol bi blo lepš narest več strani ampak zaenkrat pustmo tko
+        ima_telefon: bool = False,
+        ima_spletno_stran: bool = False,
+        limit: int = 200,       #mogoč 100
     ):
         query = """
             SELECT
@@ -73,6 +75,12 @@ class RestavracijaRepository:
                 """
             )
             params.append(dan_v_tednu)
+
+        if ima_telefon:
+            where.append("r.telefon IS NOT NULL AND TRIM(r.telefon) <> ''")
+
+        if ima_spletno_stran:
+            where.append("r.spletna_stran IS NOT NULL AND TRIM(r.spletna_stran) <> ''")
 
         if where:
             query += " WHERE " + " AND ".join(where)
