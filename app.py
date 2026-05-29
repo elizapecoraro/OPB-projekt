@@ -2,8 +2,10 @@ from bottle import Bottle, request, run, static_file, template
 
 from Services.restavracija_service import RestavracijaService
 
+
 app = Bottle()
 service = RestavracijaService()
+
 
 DNEVI = [
     {"id": 1, "ime": "ponedeljek"},
@@ -53,7 +55,6 @@ def index():
             kuhinja_id=v_int(kuhinja_id),
             dan_v_tednu=v_int(dan_v_tednu),
         )
-
     except Exception as exc:
         napaka = str(exc)
 
@@ -67,6 +68,30 @@ def index():
         izbrana_lokacija=lokacija_id,
         izbrana_kuhinja=kuhinja_id,
         izbrani_dan=dan_v_tednu,
+        napaka=napaka,
+    )
+
+
+@app.get("/restavracije/<restavracija_id:int>")
+def podrobnosti_restavracije(restavracija_id):
+    napaka = None
+    restavracija = None
+    delovni_casi = []
+
+    try:
+        restavracija = service.podrobnosti_restavracije(restavracija_id)
+        delovni_casi = service.delovni_cas_restavracije(restavracija_id)
+    except Exception as exc:
+        napaka = str(exc)
+
+    if restavracija is None and napaka is None:
+        napaka = "Restavracija ne obstaja."
+
+    return template(
+        "Presentation/views/podrobnosti.html",
+        restavracija=restavracija,
+        delovni_casi=delovni_casi,
+        dnevi=DNEVI,
         napaka=napaka,
     )
 

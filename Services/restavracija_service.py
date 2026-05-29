@@ -12,12 +12,17 @@ class RestavracijaService:
         kuhinja_id: int | None = None,
         dan_v_tednu: int | None = None,
     ):
+        if iskanje is not None:
+            iskanje = iskanje.strip()
+            if iskanje == "":
+                iskanje = None
+
         return self.repo.seznam_restavracij(
             iskanje=iskanje,
             lokacija_id=lokacija_id,
             kuhinja_id=kuhinja_id,
             dan_v_tednu=dan_v_tednu,
-            #limit=None,
+            limit=200,
         )
 
     def vse_lokacije(self):
@@ -28,3 +33,6 @@ class RestavracijaService:
 
     def podrobnosti_restavracije(self, restavracija_id: int):
         return self.repo.restavracija_po_id(restavracija_id)
+
+    def delovni_cas_restavracije(self, restavracija_id: int):
+        return self.repo.delovni_cas_restavracije(restavracija_id)

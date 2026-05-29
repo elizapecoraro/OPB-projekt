@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+    <meta charset="UTF-8">
+    <title>Podrobnosti restavracije</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<main>
+    <p>
+        <a href="/">← Nazaj na seznam</a>
+    </p>
+
+    % if napaka:
+        <section class="warning">
+            <h1>Napaka</h1>
+            <p>{{napaka}}</p>
+        </section>
+    % end
+
+    % if restavracija:
+        <article class="card">
+            <h1>{{restavracija["ime"]}}</h1>
+
+            <p>
+                <strong>Lokacija:</strong>
+                {{restavracija.get("ime_lokacije") or "Ni navedeno"}}
+            </p>
+
+            % naslov = " ".join([x for x in [restavracija.get("ulica"), restavracija.get("hisna_stevilka")] if x])
+            % if naslov:
+                <p>
+                    <strong>Naslov:</strong>
+                    {{naslov}}
+                </p>
+            % end
+
+            % if restavracija.get("kuhinje"):
+                <p>
+                    <strong>Kuhinje:</strong>
+                    {{restavracija["kuhinje"]}}
+                </p>
+            % end
+
+            % if restavracija.get("telefon"):
+                <p>
+                    <strong>Telefon:</strong>
+                    {{restavracija["telefon"]}}
+                </p>
+            % end
+
+            % if restavracija.get("spletna_stran"):
+                <p>
+                    <strong>Spletna stran:</strong>
+                    <a href="{{restavracija['spletna_stran']}}" target="_blank">
+                        {{restavracija["spletna_stran"]}}
+                    </a>
+                </p>
+            % end
+
+            % if restavracija.get("opening_hours_raw"):
+                <p>
+                    <strong>Originalni delovni čas iz OSM:</strong>
+                    {{restavracija["opening_hours_raw"]}}
+                </p>
+            % end
+
+            % if restavracija.get("zemljepisna_sirina") and restavracija.get("zemljepisna_dolzina"):
+                <p>
+                    <a
+                        href="https://www.openstreetmap.org/?mlat={{restavracija['zemljepisna_sirina']}}&mlon={{restavracija['zemljepisna_dolzina']}}#map=18/{{restavracija['zemljepisna_sirina']}}/{{restavracija['zemljepisna_dolzina']}}"
+                        target="_blank"
+                    >
+                        Prikaži na zemljevidu
+                    </a>
+                </p>
+            % end
+        </article>
+
+        <section class="card">
+            <h2>Delovni čas</h2>
+
+            % if len(delovni_casi) == 0:
+                <p>Delovni čas ni strukturirano zapisan.</p>
+            % else:
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Dan</th>
+                        <th>Od</th>
+                        <th>Do</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    % for dc in delovni_casi:
+                        % ime_dneva = next((d["ime"] for d in dnevi if d["id"] == dc["dan_v_tednu"]), "")
+                        <tr>
+                            <td>{{ime_dneva}}</td>
+                            <td>{{dc["ura_od"] or ""}}</td>
+                            <td>{{dc["ura_do"] or ""}}</td>
+                        </tr>
+                    % end
+                    </tbody>
+                </table>
+            % end
+        </section>
+    % end
+</main>
+</body>
+</html>

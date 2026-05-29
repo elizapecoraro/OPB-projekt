@@ -8,7 +8,7 @@ class RestavracijaRepository:
         lokacija_id: int | None = None,
         kuhinja_id: int | None = None,
         dan_v_tednu: int | None = None,
-        limit: int | None = None,                   #limit: int = 100,   pol bi blo lepš narest več strani ampak zaenkrat pustmo tko
+        limit: int = 200,           #limit: int = 100,   pol bi blo lepš narest več strani ampak zaenkrat pustmo tko
     ):
         query = """
             SELECT
@@ -80,11 +80,9 @@ class RestavracijaRepository:
         query += """
             GROUP BY r.restavracija_id, l.ime_lokacije
             ORDER BY r.ime
+            LIMIT %s
         """
-
-        if limit is not None:
-            query += " LIMIT %s"
-            params.append(limit)
+        params.append(limit)
 
         with get_cursor() as cur:
             cur.execute(query, params)
@@ -93,7 +91,17 @@ class RestavracijaRepository:
     def restavracija_po_id(self, restavracija_id: int):
         query = """
             SELECT
-                r.*,
+                r.restavracija_id,
+                r.osm_id,
+                r.osm_tip,
+                r.ime,
+                r.ulica,
+                r.hisna_stevilka,
+                r.telefon,
+                r.spletna_stran,
+                r.zemljepisna_sirina,
+                r.zemljepisna_dolzina,
+                r.opening_hours_raw,
                 l.ime_lokacije,
                 COALESCE(STRING_AGG(DISTINCT k.vrsta, ', ' ORDER BY k.vrsta), '') AS kuhinje
             FROM restavracija r
@@ -108,24 +116,41 @@ class RestavracijaRepository:
             cur.execute(query, [restavracija_id])
             return cur.fetchone()
 
-    def vse_lokacije(self):
+    def delovni_cas_restavracije(self, restavracija_id: int):
+        query = """
+            SELECT
+                delovni_cas_id,
+                restavracija_id,
+                dan_v_tednu,
+                ura_od,
+                ura_do
+            FROM delovni_cas
+            WHERE restavracija_id = %s
+            ORDER BY dan_v_tednu, ura_od
+        """
+
         with get_cursor() as cur:
-            cur.execute(
-                """
-                SELECT lokacija_id, ime_lokacije
-                FROM lokacija
-                ORDER BY ime_lokacije
-                """
-            )
+            cur.execute(query, [restavracija_id])
+            return cur.fetchall()
+
+    def vse_lokacije(self):
+        query = """
+            SELECT lokacija_id, ime_lokacije
+            FROM lokacija
+            ORDER BY ime_lokacije
+        """
+
+        with get_cursor() as cur:
+            cur.execute(query)
             return cur.fetchall()
 
     def vse_kuhinje(self):
+        query = """
+            SELECT kuhinja_id, vrsta
+            FROM kuhinja
+            ORDER BY vrsta
+        """
+
         with get_cursor() as cur:
-            cur.execute(
-                """
-                SELECT kuhinja_id, vrsta
-                FROM kuhinja
-                ORDER BY vrsta
-                """
-            )
+            cur.execute(query)
             return cur.fetchall()

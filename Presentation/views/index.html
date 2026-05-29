@@ -76,7 +76,11 @@
 
         % for r in restavracije:
             <article class="card">
-                <h2>{{r["ime"]}}</h2>
+                <h2>
+                    <a href="/restavracije/{{r['restavracija_id']}}">
+                        {{r["ime"]}}
+                    </a>
+                </h2>
 
                 <p>
                     <strong>Lokacija:</strong>
