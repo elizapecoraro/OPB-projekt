@@ -1,6 +1,13 @@
 # Restavracije v Sloveniji
 
-Projekt pri predmetu **Osnove podatkovnih baz**. Cilj projekta je spletna aplikacija za pregled restavracij v Sloveniji. Podatki izhajajo iz OpenStreetMap/Overpass izvoza, aplikacija pa bo omogočala pregled restavracij po lokaciji, kuhinji in osnovnih kontaktnih podatkih.
+Projekt pri predmetu **Osnove podatkovnih baz**.
+
+Avtorici: Eliza Katarina Pecoraro in Kaja Blažko
+
+## Opis projekta
+
+Spletna aplikacija prikazuje restavracije v Sloveniji na podlagi podatkov iz *OpenStreetMap*.  
+Uporabnik lahko restavracije pregleduje, išče in filtrira po različnih kriterijih, kot so lokacija, vrsta kuhinje, dan v tednu, telefonska številka, spletna stran in delovni čas.
 
 ## ER diagram baze
 
