@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="sl">
 <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Stack+Sans+Headline:wght@200..700&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
     <title>Restavracije v Sloveniji</title>
     <link rel="stylesheet" href="/static/style.css">
@@ -8,7 +11,7 @@
 
 <body>
     <main>
-        <h1>Restavracije v Sloveniji</h1>
+        <h1>RESTAVRACIJE V SLOVENIJI</h1>
 
         <p>
             Pregled restavracij, lokacij in vrst kuhinje po podatkih OpenStreetMap.
@@ -52,41 +55,43 @@
                 % end
             </select>
 
-            <label>
-                <input
-                    type="checkbox"
-                    name="ima_telefon"
-                    value="1"
-                    % if ima_telefon:
-                        checked
-                    % end
-                >
-                Ima telefonsko številko
-            </label>
+            <div class="filter-checkboxes">
+                <label>
+                    <input
+                        type="checkbox"
+                        name="ima_telefon"
+                        value="1"
+                        % if ima_telefon:
+                            checked
+                        % end
+                    >
+                    Ima telefonsko številko
+                </label>
 
-            <label>
-                <input
-                    type="checkbox"
-                    name="ima_spletno_stran"
-                    value="1"
-                    % if ima_spletno_stran:
-                        checked
-                    % end
-                >
-                Ima spletno stran
-            </label>
+                <label>
+                    <input
+                        type="checkbox"
+                        name="ima_spletno_stran"
+                        value="1"
+                        % if ima_spletno_stran:
+                            checked
+                        % end
+                    >
+                    Ima spletno stran
+                </label>
 
-            <label>
-                <input
-                    type="checkbox"
-                    name="ima_delovni_cas"
-                    value="1"
-                    % if ima_delovni_cas:
-                        checked
-                    % end
-                >
-                Ima podan delovni čas
-            </label>
+                <label>
+                    <input
+                        type="checkbox"
+                        name="ima_delovni_cas"
+                        value="1"
+                        % if ima_delovni_cas:
+                            checked
+                        % end
+                    >
+                    Ima podan delovni čas
+                </label>
+            </div>
 
             <button type="submit">Išči</button>
         </form>

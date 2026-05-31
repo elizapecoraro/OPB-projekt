@@ -1,71 +1,233 @@
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
+
+
 
 body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f5f7f4;
-  color: #172217;
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+    background: #f4ddb9;
+    color: #252525;
+    line-height: 1.5;
 }
 
-.container {
-  max-width: 1040px;
-  margin: 0 auto;
-  padding: 32px 16px;
-}
-
-header {
-  margin-bottom: 24px;
+main {
+    width: min(1100px, 92%);
+    margin: 0 auto;
+    padding: 32px 0 48px;
 }
 
 h1 {
-  margin-bottom: 8px;
+    margin-bottom: 8px;
+    font-size: 36px;
+    color: #2f2a24;
+    font-family: "Stack Sans Headline", sans-serif;
 }
 
-.search-form {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 24px;
+h2 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    font-size: 22px;
+    font-family: "Poppins", sans-serif;
 }
 
-input,
-button {
-  padding: 10px 12px;
-  border: 1px solid #b8c7b4;
-  border-radius: 8px;
+p {
+    margin-top: 0;
 }
 
-input {
-  flex: 1;
+a {
+    color: #7b3f00;
+    text-decoration: none;
+    font-weight: 600;
 }
 
-button {
-  cursor: pointer;
+a:hover {
+    text-decoration: underline;
 }
+
+/* Obrazec s filtri */
+
+.filters {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 12px;
+    align-items: center;
+    margin: 28px 0 24px;
+    padding: 18px;
+    background: #ffffff;
+    border: 1px solid #e3d8ca;
+    border-radius: 16px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+}
+
+.filters input[type="text"],
+.filters select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #c9b9a6;
+    border-radius: 10px;
+    background: #fffdf9;
+    font-size: 15px;
+}
+
+.filters input[type="text"]:focus,
+.filters select:focus {
+    outline: none;
+    border-color: #9a5b20;
+    box-shadow: 0 0 0 3px rgba(154, 91, 32, 0.15);
+}
+
+.filter-checkboxes {
+    grid-column: 1 / 4;
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    flex-wrap: wrap;
+}
+
+.filters label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: #3c332b;
+}
+
+.filters input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: #8a4b16;
+}
+
+.filters button {
+    grid-column: 4 / 5;
+    padding: 11px 18px;
+    border: none;
+    border-radius: 10px;
+    background: #8a4b16;
+    color: white;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.filters button:hover {
+    background: #6f3b10;
+}
+
+/* Obvestila */
 
 .warning {
-  padding: 16px;
-  margin-bottom: 24px;
-  border: 1px solid #d8c17c;
-  border-radius: 12px;
-  background: #fff8dd;
+    margin: 20px 0;
+    padding: 18px;
+    border-left: 5px solid #b00020;
+    border-radius: 12px;
+    background: #fff1f1;
 }
 
-.cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 16px;
+.warning h2,
+.warning h1 {
+    margin-top: 0;
+    color: #8a0018;
 }
+
+/* Kartice restavracij */
 
 .card {
-  padding: 16px;
-  border: 1px solid #d6dfd2;
-  border-radius: 12px;
-  background: white;
+    margin: 18px 0;
+    padding: 20px;
+    background: #ffffff;
+    border: 1px solid #e1d6c8;
+    border-radius: 18px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
 }
 
-.card h2 {
-  margin-top: 0;
-  font-size: 1.1rem;
+.card h2 a,
+.card h1 {
+    color: #2f2a24;
+}
+
+.card p {
+    margin-bottom: 8px;
+}
+
+.card strong {
+    color: #3a3028;
+}
+
+/* Tabela pri podrobnostih */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+    background: white;
+}
+
+th,
+td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #e4d8ca;
+    text-align: left;
+}
+
+th {
+    background: #dcc7ac;
+    color: #302820;
+}
+
+/* Paginacija */
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 18px;
+    margin: 32px 0 16px;
+}
+
+.pagination a,
+.pagination span {
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: #ffffff;
+    border: 1px solid #d9c8b4;
+}
+
+.pagination a:hover {
+    background: #efe5d8;
+    text-decoration: none;
+}
+
+/* Mobilni prikaz */
+
+@media (max-width: 850px) {
+    .filters {
+        grid-template-columns: 1fr;
+    }
+
+    .filter-checkboxes {
+        grid-column: 1;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .filters button {
+        grid-column: 1;
+    }
+
+    h1 {
+        font-size: 30px;
+    }
+
+    .card {
+        padding: 16px;
+    }
+
+    .pagination {
+        flex-direction: column;
+        gap: 10px;
+    }
 }
