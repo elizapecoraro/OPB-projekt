@@ -1,1 +1,0 @@
-# Aplikacijski / servisni nivo projekta.

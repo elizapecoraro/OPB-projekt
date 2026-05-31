@@ -1,1 +1,0 @@
-# Predstavitveni nivo projekta.

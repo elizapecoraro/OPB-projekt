@@ -1,1 +1,0 @@
-# Podatkovni nivo projekta.
