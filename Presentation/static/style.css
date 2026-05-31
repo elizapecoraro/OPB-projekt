@@ -100,8 +100,15 @@ a:hover {
     accent-color: #8a4b16;
 }
 
-.filters button {
+.filter-actions {
     grid-column: 4 / 5;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.filters button {
     padding: 11px 18px;
     border: none;
     border-radius: 10px;
@@ -110,6 +117,21 @@ a:hover {
     font-size: 15px;
     font-weight: 700;
     cursor: pointer;
+}
+
+.clear-filters {
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid #d9c8b4;
+    background: #fffdf9;
+    color: #7b3f00;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.clear-filters:hover {
+    background: #efe5d8;
+    text-decoration: none;
 }
 
 .filters button:hover {
@@ -214,8 +236,10 @@ th {
         gap: 10px;
     }
 
-    .filters button {
+    .filter-actions {
         grid-column: 1;
+        justify-content: flex-start;
+        flex-wrap: wrap;
     }
 
     h1 {
