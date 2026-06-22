@@ -21,32 +21,6 @@ Uporabnik lahko:
 Za osvežitev podatkov je pripravljena skripta `download_osm.py`, ki preko Overpass API prenese aktualne podatke in jih shrani v JSON datoteko, nato pa se podatki uvozijo v PostgreSQL bazo.
 
 
-Aplikacija uporablja relacijsko podatkovno bazo PostgreSQL ter je razdeljena na podatkovni, storitveni in predstavitveni sloj.
-
-## Zagon aplikacije
-
-Za zagon aplikacije je potrebno:
-
-1. Namestiti odvisnosti:
-
-```bash
-pip install -r requirenments.txt
-```
-
-2. Ustvariti datoteko `.env` z nastavitvami za povezavo do PostgreSQL baze.
-
-3. Zagnati aplikacijo:
-
-```bash
-python app.py
-```
-
-Po zagonu je aplikacija dostopna na naslovu:
-
-```text
-http://localhost:8080
-```
-
 ## ER diagram baze
 
 ![ER diagram baze](docs/restavracije_ER_koncni.png)
