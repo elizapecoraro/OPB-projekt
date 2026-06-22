@@ -61,7 +61,7 @@ CREATE INDEX idx_kuhinja_vrsta ON kuhinja(LOWER(vrsta));
 CREATE INDEX idx_delovni_cas_dan ON delovni_cas(dan_v_tednu);
 
 
-SELECT COUNT(*) FROM restavracija;
-SELECT COUNT(*) FROM lokacija;
-SELECT COUNT(*) FROM kuhinja;
-SELECT COUNT(*) FROM delovni_cas;
+#SELECT COUNT(*) FROM restavracija;
+#SELECT COUNT(*) FROM lokacija;
+#SELECT COUNT(*) FROM kuhinja;
+#SELECT COUNT(*) FROM delovni_cas;

@@ -7,6 +7,37 @@ from Data.database import get_cursor
 
 DATA_PATH = Path(__file__).with_name("restavracije_slovenija.json")
 
+def normaliziraj_lokacijo(ime_lokacije):
+    if not ime_lokacije:
+        return "Neznano"
+
+    ime = ime_lokacije.strip()
+
+    popravki = {
+        "Ajdovscina": "Ajdovščina",
+        "Bohinjsko Jezero": "Bohinjsko jezero",
+        "Jesenice na dolenjskem": "Jesenice na Dolenjskem",
+        "kostanjevica": "Kostanjevica",
+        "Nova vas": "Nova Vas",
+        "velike Lašče": "Velike Lašče",
+        "Ljubjana": "Ljubljana",
+        "Ljublijana": "Ljubljana",
+        "Ljubljana-Dobrunje": "Ljubljana - Dobrunje",
+        "Koper - Capodistria": "Koper",
+        "Koper / Capodistria": "Koper",
+        "Koper-Capodistria": "Koper",
+        "Izola - Isola": "Izola",
+        "Izola / Isola": "Izola",
+        "Piran - Pirano": "Piran",
+        "Portorož - Portorose": "Portorož",
+        "Ratece - Planica": "Rateče - Planica",
+        "Šmarje-Sap": "Šmarje - Sap",
+        "Sv. Trojica v Slov. goricah": "Sv. Trojica v Slovenskih goricah",
+        "Lenart v Slov. goricah": "Lenart v Slovenskih Goricah",
+    }
+
+    return popravki.get(ime, ime)
+
 
 def get_or_create_lokacija(cur, ime_lokacije):
     cur.execute(
@@ -201,6 +232,7 @@ def main():
                 or "Neznano"
             )
 
+            ime_lokacije = normaliziraj_lokacijo(ime_lokacije)
             lokacija_id = get_or_create_lokacija(cur, ime_lokacije)
 
             cur.execute(
