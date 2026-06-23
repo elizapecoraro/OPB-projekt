@@ -127,8 +127,6 @@ Nastavitve javne povezave so že zapisane v datoteki `.env.example`.
 
 ## Posodabljanje podatkov
 
-Ta korak ni potreben za pregled ali ocenjevanje aplikacije. Namenjen je samo vzdrževalcu baze.
-
 1. `Data/download_osm.py` pridobi podatke iz Overpass API.
 2. `Data/create.sql` na novo izdela podatkovno shemo.
 3. `Data/import_osm.py` uvozi pridobljene podatke.
