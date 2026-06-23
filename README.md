@@ -109,15 +109,18 @@ Aplikacijo ustavite s `Ctrl+C`.
 
 Aplikacija se mora povezovati z uporabnikom `javnost`, ki ima pravice za povezavo z bazo, uporabo sheme `public` in branje tabel aplikacije.
 Za pripravo lokalne konfiguracije kopirajte datoteko `.env.example` v `.env`.
-Windows PowerShell:
 
+**Windows PowerShell:**
+```powershell
 Copy-Item .env.example .env
+```
 
-macOS ali Linux:
-
+**macOS ali Linux:**
+```bash
 cp .env.example .env
+```
 
-Nastavitve javne povezave so že zapisane v datoteki .env.example.
+Nastavitve javne povezave so že zapisane v datoteki `.env.example`.
 
 ## ER-diagram
 ![ER-diagram podatkovne baze](docs/restavracije_ER_koncni.png)
