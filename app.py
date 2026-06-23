@@ -6,7 +6,6 @@ from Services.restavracija_service import RestavracijaService
 app = Bottle()
 service = RestavracijaService()
 
-
 DNEVI = [
     {"id": 1, "ime": "ponedeljek"},
     {"id": 2, "ime": "torek"},
@@ -24,7 +23,7 @@ def v_int(vrednost):
 
     try:
         return int(vrednost)
-    except ValueError:
+    except (TypeError, ValueError):
         return None
 
 
@@ -39,9 +38,15 @@ def index():
     lokacija_id = request.query.getunicode("lokacija_id") or ""
     kuhinja_id = request.query.getunicode("kuhinja_id") or ""
     dan_v_tednu = request.query.getunicode("dan_v_tednu") or ""
+
     ima_telefon = request.query.getunicode("ima_telefon") == "1"
-    ima_spletno_stran = request.query.getunicode("ima_spletno_stran") == "1"
-    ima_delovni_cas = request.query.getunicode("ima_delovni_cas") == "1"
+    ima_spletno_stran = (
+        request.query.getunicode("ima_spletno_stran") == "1"
+    )
+    ima_delovni_cas = (
+        request.query.getunicode("ima_delovni_cas") == "1"
+    )
+
     stran = v_int(request.query.getunicode("stran")) or 1
     na_stran = 30
 
@@ -49,12 +54,10 @@ def index():
         stran = 1
 
     offset = (stran - 1) * na_stran
-
     napaka = None
     restavracije = []
     lokacije = []
     kuhinje = []
-
     skupno_restavracij = 0
     skupno_strani = 1
 
@@ -72,7 +75,10 @@ def index():
             ima_delovni_cas=ima_delovni_cas,
         )
 
-        skupno_strani = max(1, (skupno_restavracij + na_stran - 1) // na_stran)
+        skupno_strani = max(
+            1,
+            (skupno_restavracij + na_stran - 1) // na_stran,
+        )
 
         if stran > skupno_strani:
             stran = skupno_strani
@@ -120,8 +126,12 @@ def podrobnosti_restavracije(restavracija_id):
     delovni_casi = []
 
     try:
-        restavracija = service.podrobnosti_restavracije(restavracija_id)
-        delovni_casi = service.delovni_cas_restavracije(restavracija_id)
+        restavracija = service.podrobnosti_restavracije(
+            restavracija_id
+        )
+        delovni_casi = service.delovni_cas_restavracije(
+            restavracija_id
+        )
     except Exception as exc:
         napaka = str(exc)
 
@@ -138,4 +148,10 @@ def podrobnosti_restavracije(restavracija_id):
 
 
 if __name__ == "__main__":
-    run(app, host="localhost", port=8080, debug=True, reloader=True)
+    run(
+        app,
+        host="localhost",
+        port=8080,
+        debug=True,
+        reloader=True,
+    )
