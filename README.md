@@ -107,27 +107,17 @@ Aplikacijo ustavite s `Ctrl+C`.
 
 ## Dostop do podatkovne baze
 
-Aplikacija se mora povezovati z uporabnikom `javnost`. Ker aplikacija podatke samo bere, ta uporabnik potrebuje pravico za povezavo z bazo, uporabo sheme in branje vseh tabel aplikacije.
+Aplikacija se mora povezovati z uporabnikom `javnost`, ki ima pravice za povezavo z bazo, uporabo sheme `public` in branje tabel aplikacije.
+Za pripravo lokalne konfiguracije kopirajte datoteko `.env.example` v `.env`.
+Windows PowerShell:
 
-Naslednje ukaze mora enkrat izvesti lastnik baze:
+Copy-Item .env.example .env
 
-```sql
-GRANT CONNECT ON DATABASE sem2026_kajabl TO javnost;
-GRANT USAGE ON SCHEMA public TO javnost;
+macOS ali Linux:
 
-GRANT SELECT ON TABLE
-    lokacija,
-    restavracija,
-    kuhinja,
-    restavracija_kuhinja,
-    delovni_cas
-TO javnost;
+cp .env.example .env
 
-ALTER DEFAULT PRIVILEGES IN SCHEMA public
-GRANT SELECT ON TABLES TO javnost;
-```
-
-Enaki ukazi so shranjeni tudi v datoteki `Data/grant_javnost.sql`.
+Nastavitve javne povezave so že zapisane v datoteki .env.example.
 
 ## ER-diagram
 ![ER-diagram podatkovne baze](docs/restavracije_ER_koncni.png)
