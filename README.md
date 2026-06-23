@@ -22,15 +22,6 @@ Uporabnik lahko:
 - vidi naslov, vrste kuhinje, telefonsko številko, spletno stran in delovni čas;
 - odpre lokacijo restavracije na zemljevidu.
 
-## Tehnologije
-
-- Python 3.10 ali novejši
-- Bottle
-- PostgreSQL
-- psycopg2
-- HTML in CSS
-- OpenStreetMap oziroma Overpass API za pridobitev začetnih podatkov
-
 ## Lokalni zagon aplikacije
 
 ### 1. Kloniranje repozitorija
@@ -103,9 +94,7 @@ V brskalniku odprite:
 http://localhost:8080
 ```
 
-Aplikacijo ustavite s kombinacijo `Ctrl+C`.
-
-> Profesorju za uporabo aplikacije ni treba ustvarjati tabel ali ponovno uvažati podatkov. Datotek `Data/create.sql`, `Data/download_osm.py` in `Data/import_osm.py` pri običajnem zagonu ne poganjajte.
+Aplikacijo ustavite s `Ctrl+C`.
 
 ## Kratka navodila za uporabo
 
@@ -141,81 +130,7 @@ GRANT SELECT ON TABLES TO javnost;
 Enaki ukazi so shranjeni tudi v datoteki `Data/grant_javnost.sql`.
 
 ## ER-diagram
-
-```mermaid
-erDiagram
-    LOKACIJA ||--o{ RESTAVRACIJA : vsebuje
-    RESTAVRACIJA ||--o{ DELOVNI_CAS : ima
-    RESTAVRACIJA ||--o{ RESTAVRACIJA_KUHINJA : ima
-    KUHINJA ||--o{ RESTAVRACIJA_KUHINJA : opisuje
-
-    LOKACIJA {
-        int lokacija_id PK
-        varchar ime_lokacije UK
-    }
-
-    RESTAVRACIJA {
-        int restavracija_id PK
-        bigint osm_id
-        varchar osm_tip
-        varchar ime
-        varchar ulica
-        varchar hisna_stevilka
-        varchar telefon
-        varchar spletna_stran
-        decimal zemljepisna_sirina
-        decimal zemljepisna_dolzina
-        text opening_hours_raw
-        int lokacija_id FK
-    }
-
-    KUHINJA {
-        int kuhinja_id PK
-        varchar vrsta UK
-    }
-
-    RESTAVRACIJA_KUHINJA {
-        int restavracija_id PK, FK
-        int kuhinja_id PK, FK
-    }
-
-    DELOVNI_CAS {
-        int delovni_cas_id PK
-        int restavracija_id FK
-        smallint dan_v_tednu
-        time ura_od
-        time ura_do
-    }
-```
-
-Povezave med tabelami:
-
-- ena lokacija ima lahko več restavracij;
-- ena restavracija ima lahko več zapisov delovnega časa;
-- restavracija ima lahko več vrst kuhinje, posamezna vrsta kuhinje pa je lahko povezana z več restavracijami;
-- povezavo mnogo-proti-mnogo med restavracijami in kuhinjami predstavlja tabela `restavracija_kuhinja`.
-
-## Struktura projekta
-
-```text
-OPB-projekt/
-├── app.py                         # zagon spletne aplikacije in poti
-├── requirements.txt               # potrebne zunanje knjižnice
-├── .env.example                   # primer nastavitev povezave z bazo
-├── Data/
-│   ├── database.py                # povezava s PostgreSQL
-│   ├── create.sql                 # izdelava tabel; samo za vzdrževalca baze
-│   ├── grant_javnost.sql          # pravice za javnega uporabnika
-│   ├── download_osm.py            # prenos podatkov OSM
-│   ├── import_osm.py              # uvoz podatkov v bazo
-│   └── models.py                  # podatkovni modeli
-├── Services/
-│   └── restavracija_service.py    # poizvedbe in poslovna logika
-├── Presentation/
-│   ├── views/                     # HTML-predloge
-│   └── static/                    # CSS in druge statične datoteke
-└── docs/                          # dokumentacija
-```
+![ER-diagram podatkovne baze](docs/restavracije_ER_koncni.png)
 
 ## Posodabljanje podatkov
 
