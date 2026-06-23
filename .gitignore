@@ -15,6 +15,7 @@ __pycache__/
 # Nastavitve in skrivnosti
 .env
 .env.*
+!.env.example
 *.local
 
 # Baze / lokalni izvozi
@@ -36,6 +37,3 @@ Thumbs.db
 build/
 dist/
 *.egg-info/
-
-__pycache__/
-*.pyc
