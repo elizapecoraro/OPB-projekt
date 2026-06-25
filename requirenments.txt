@@ -1,5 +1,0 @@
-bottle
-psycopg2-binary
-dataclasses-json
-python-dotenv
-requests
