@@ -129,7 +129,7 @@ Nastavitve javne povezave so že zapisane v datoteki `.env.example`.
 
 1. `Data/download_osm.py` pridobi podatke iz Overpass API.
 2. `Data/create.sql` na novo izdela podatkovno shemo.
-3. `Data/import_osm.py` uvozi pridobljene podatke.
+3. `Data/import_json.py` uvozi pridobljene podatke.
 
 **Pozor:** `Data/create.sql` najprej izbriše obstoječe tabele, zato ga ne zaganjajte nad bazo, ki jo želite ohraniti.
 
