@@ -74,7 +74,7 @@ Vsebina datoteke naj bo:
 
 ```dotenv
 DB_HOST=baza.fmf.uni-lj.si
-DB_PORT=5432
+DB_PORT=5423
 DB_NAME=sem2026_kajabl
 DB_USER=javnost
 DB_PASSWORD=
