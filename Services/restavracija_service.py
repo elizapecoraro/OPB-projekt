@@ -1,9 +1,26 @@
+"""Poslovna logika za prikaz in iskanje restavracij."""
+
 from Data.restavracija_repository import RestavracijaRepository
 
 
 class RestavracijaService:
     def __init__(self):
         self.repo = RestavracijaRepository()
+
+    @staticmethod
+    def _kot_slovar(objekt):
+        return objekt.to_dict() if objekt is not None else None
+
+    @classmethod
+    def _kot_slovarji(cls, objekti):
+        return [cls._kot_slovar(objekt) for objekt in objekti]
+
+    @staticmethod
+    def _uredi_iskanje(iskanje: str | None) -> str | None:
+        if iskanje is None:
+            return None
+        iskanje = iskanje.strip()
+        return iskanje or None
 
     def poisci_restavracije(
         self,
@@ -17,13 +34,8 @@ class RestavracijaService:
         limit: int = 20,
         offset: int = 0,
     ):
-        if iskanje is not None:
-            iskanje = iskanje.strip()
-            if iskanje == "":
-                iskanje = None
-
-        return self.repo.seznam_restavracij(
-            iskanje=iskanje,
+        rezultati = self.repo.seznam_restavracij(
+            iskanje=self._uredi_iskanje(iskanje),
             lokacija_id=lokacija_id,
             kuhinja_id=kuhinja_id,
             dan_v_tednu=dan_v_tednu,
@@ -33,7 +45,8 @@ class RestavracijaService:
             limit=limit,
             offset=offset,
         )
-    
+        return self._kot_slovarji(rezultati)
+
     def stevilo_restavracij(
         self,
         iskanje: str | None = None,
@@ -44,13 +57,8 @@ class RestavracijaService:
         ima_spletno_stran: bool = False,
         ima_delovni_cas: bool = False,
     ):
-        if iskanje is not None:
-            iskanje = iskanje.strip()
-            if iskanje == "":
-                iskanje = None
-
         return self.repo.stevilo_restavracij(
-            iskanje=iskanje,
+            iskanje=self._uredi_iskanje(iskanje),
             lokacija_id=lokacija_id,
             kuhinja_id=kuhinja_id,
             dan_v_tednu=dan_v_tednu,
@@ -60,13 +68,17 @@ class RestavracijaService:
         )
 
     def vse_lokacije(self):
-        return self.repo.vse_lokacije()
+        return self._kot_slovarji(self.repo.vse_lokacije())
 
     def vse_kuhinje(self):
-        return self.repo.vse_kuhinje()
+        return self._kot_slovarji(self.repo.vse_kuhinje())
 
     def podrobnosti_restavracije(self, restavracija_id: int):
-        return self.repo.restavracija_po_id(restavracija_id)
+        return self._kot_slovar(
+            self.repo.restavracija_po_id(restavracija_id)
+        )
 
     def delovni_cas_restavracije(self, restavracija_id: int):
-        return self.repo.delovni_cas_restavracije(restavracija_id)
+        return self._kot_slovarji(
+            self.repo.delovni_cas_restavracije(restavracija_id)
+        )

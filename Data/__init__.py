@@ -1,0 +1,1 @@
+"""Podatkovni nivo aplikacije."""
