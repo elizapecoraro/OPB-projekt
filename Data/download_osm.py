@@ -1,4 +1,4 @@
-"""Prenos aktualnih gostinskih obratov iz OpenStreetMap prek Overpass API."""
+"""Prenos aktualnih podatkov iz OpenStreetMap prek Overpass API."""
 
 import json
 from pathlib import Path
